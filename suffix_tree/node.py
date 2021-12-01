@@ -3,8 +3,14 @@
 
 """A node class for a Generalized Suffix Tree"""
 
-from .util import Path
+from .util import Path, UniqueEndChar
 from . import lca_mixin
+
+def key_str(a):
+    if isinstance(a, UniqueEndChar):
+        return a.__str__()
+    else:
+        return a
 
 class Node (lca_mixin.Node):
     """The abstract base class for internal and leaf nodes.
@@ -198,6 +204,8 @@ class Leaf (lca_mixin.Leaf, Node):
         a.append ('"%s" [color=green];\n' % str (self))
         super ().to_dot (a)
 
+    def parentheses (self):
+        print('()', end='', flush=True)
 
 class Internal (lca_mixin.Internal, Node):
     """ An internal node.
@@ -288,3 +296,11 @@ class Internal (lca_mixin.Internal, Node):
             child = self.children[key]
             a.append ('"%s" -> "%s" [label="%s"];\n' % (str (self), str (child), str (key)))
             child.to_dot (a)
+
+    def parentheses (self):
+        print('(', end='', flush=True)
+        for key in sorted (self.children, key=key_str):
+            child = self.children[key]
+            child.parentheses ()
+        print(')', end='', flush=True)
+

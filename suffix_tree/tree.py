@@ -241,3 +241,8 @@ class Tree (lca_mixin.Tree):
         self.root.to_dot (dot)
         dot.append ('}\n')
         return ''.join (dot)
+
+    def parentheses (self):
+        """ Output the balanced parenthesis representation of the tree. """
+        self.root.parentheses()
+
